@@ -63,4 +63,50 @@ class CustomerController extends Controller
 
     }
 
+    public function updateCustomer(Request $request,$id){
+
+        $validate = Validator::make($request->all(),[
+            'name' => 'required',
+            'contact'=> 'required',
+            'salary' => 'required'
+        ]);
+
+        if($validate->fails()){
+            return 'false';
+        }else{
+            $customer = Customer::find($id);
+
+            $customer->name=$request->name;
+            $customer->contact=$request->contact;
+            $customer->salary=$request->salary;
+
+            $customer->save();
+
+            $data = [
+                "status"=>200,
+                "message"=>'data successufuly updated'
+
+            ];
+            return response()->json($data,200);
+
+            
+        }
+
+       
+    }
+
+    public function deleteCustomer($id){
+        $customer = Customer::find($id);
+        $customer->delete();
+
+        $data = [
+            'status' => 200,
+            'message'=> "delete succsuss"
+        ];
+        return response()->json($data,200);
+    }
+
+  
+
+
 }
