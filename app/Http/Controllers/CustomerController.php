@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use Validator;
 
 class CustomerController extends Controller
 {
@@ -30,6 +31,36 @@ class CustomerController extends Controller
         ];
 
         return response()->json($data,200);
+    }
+
+    public function saveCustomer(Request $request){
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'contact'=> 'required',
+            'salary' => 'required'
+        ]);
+
+        if($validator->fails()){
+           
+            return 'Error';
+        }else{
+            $customer = new Customer;
+
+            $customer->name=$request->name;
+            $customer->contact=$request->contact;
+            $customer->salary=$request->salary;
+
+            $customer->save();
+
+            $data = [
+                "status"=>200,
+                "message"=>'data successufuly Added'
+
+            ];
+            return response()->json($data,200);
+
+        }
+
     }
 
 }
