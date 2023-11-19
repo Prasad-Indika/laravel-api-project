@@ -37,18 +37,35 @@ class CustomerController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => 'required',
             'contact'=> 'required',
-            'salary' => 'required'
+            'salary' => 'required',
+            'image' => 'required'
         ]);
 
         if($validator->fails()){
            
             return 'Error';
         }else{
+
+
+            if($request->hasFile('image')){
+                $img = $request->image;
+                $imageName = time() . '.' . $img->getClientOriginalExtension();
+                $img->move(public_path('images'), $imageName);
+
+                $imagePath = 'images/' . $imageName;
+
+                            
+            }else{
+                $imagePath = null;
+            }
+
+
             $customer = new Customer;
 
             $customer->name=$request->name;
             $customer->contact=$request->contact;
             $customer->salary=$request->salary;
+            $customer->image=$imagePath;
 
             $customer->save();
 
