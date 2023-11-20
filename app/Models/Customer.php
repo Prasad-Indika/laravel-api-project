@@ -15,4 +15,9 @@ class Customer extends Model
         'salary',
         'image',
     ];
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'cus_id');
+    }
 }
