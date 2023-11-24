@@ -30,3 +30,7 @@ Route::post('customer',[CustomerController::class,'saveCustomer']);
 Route::put('customer/{id}',[CustomerController::class,'updateCustomer']);
 
 Route::delete('customer/{id}',[CustomerController::class,'deleteCustomer']);
+
+Route::get('customer/address/{id}',[CustomerController::class,'getAddressesByCusId']);
+
+Route::post('address/{id}',[CustomerController::class,'saveAddress']);
