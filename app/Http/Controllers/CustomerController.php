@@ -86,9 +86,14 @@ class CustomerController extends Controller
 
             $customer->save();
 
+            $address = $request->addresses;
+            $customer->addresses()->createMany($address);
+
+
             $data = [
                 "status"=>200,
-                "message"=>'data successufuly Added'
+                // "message"=>'data successufuly Added'
+                "message"=> $request->addresses
 
             ];
             return response()->json($data,200);
@@ -125,13 +130,30 @@ class CustomerController extends Controller
         if($validate->fails()){
             return 'false';
         }else{
+
+            // if($request->hasFile('image')){
+            //     $img = $request->image;
+            //     $imageName = time() . '.' . $img->getClientOriginalExtension();
+            //     $img->move(public_path('images'), $imageName);
+
+            //     $imagePath = 'images/' . $imageName;
+
+                            
+            // }else{
+            //     $imagePath = null;
+            // }
+
             $customer = Customer::find($id);
 
             $customer->name=$request->name;
             $customer->contact=$request->contact;
             $customer->salary=$request->salary;
+            //$customer->image=$imagePath;
 
             $customer->save();
+
+            // $address = $request->addresses;
+            // $customer->addresses()->createMany($address);
 
             $data = [
                 "status"=>200,
