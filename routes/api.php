@@ -33,4 +33,9 @@ Route::delete('customer/{id}',[CustomerController::class,'deleteCustomer']);
 
 Route::get('customer/address/{id}',[CustomerController::class,'getAddressesByCusId']);
 
-Route::post('address/{id}',[CustomerController::class,'saveAddress']);
+Route::post('customer/address/{id}',[CustomerController::class,'saveAddress']);
+
+
+
+Route::put('address/{id}',[CustomerController::class,'updateAddressById']);
+Route::post('address/{id}',[CustomerController::class,'updateAddressById']);

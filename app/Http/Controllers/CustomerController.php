@@ -17,7 +17,6 @@ class CustomerController extends Controller
         $data = [
             'status' => 200,
             'customer' => $customers
-            // 'customer_address' => 'address'
         ];
 
         return response()->json($data,200);
@@ -33,7 +32,6 @@ class CustomerController extends Controller
         ];
 
         return response()->json($data,200);
-        // return $customer->addresses;
     }
 
     public function getAddressesByCusId($id){
@@ -46,8 +44,6 @@ class CustomerController extends Controller
         ];
 
         return response()->json($data,200);
-        // return $customer->addresses;
-        // return 'abc';
     }
 
     public function saveCustomer(Request $request){
@@ -55,11 +51,9 @@ class CustomerController extends Controller
             'name' => 'required',
             'contact'=> 'required',
             'salary' => 'required'
-            // 'image' => 'required'
         ]);
 
         if($validator->fails()){
-           
             return 'Error';
         }else{
 
@@ -67,15 +61,13 @@ class CustomerController extends Controller
             if($request->hasFile('image')){
                 $img = $request->image;
                 $imageName = time() . '.' . $img->getClientOriginalExtension();
-                $img->move(public_path('images'), $imageName);
+                $img->storeAs('public/images',$imageName);
 
                 $imagePath = 'images/' . $imageName;
-
-                            
+                           
             }else{
                 $imagePath = null;
             }
-
 
             $customer = new Customer;
 
@@ -86,20 +78,18 @@ class CustomerController extends Controller
 
             $customer->save();
 
-            $address = $request->addresses;
+                       
+            $address = json_decode($request->input('addresses'), true);
             $customer->addresses()->createMany($address);
 
 
             $data = [
                 "status"=>200,
-                // "message"=>'data successufuly Added'
-                "message"=> $request->addresses
-
+                "message"=>'data successufuly Added'
+                
             ];
             return response()->json($data,200);
-
         }
-
     }
 
     public function saveAddress(Request $request,$id){
@@ -116,7 +106,6 @@ class CustomerController extends Controller
         ];
         return response()->json($data,200);
 
-        // return $request;
     }
 
     public function updateCustomer(Request $request,$id){
@@ -131,41 +120,25 @@ class CustomerController extends Controller
             return 'false';
         }else{
 
-            // if($request->hasFile('image')){
-            //     $img = $request->image;
-            //     $imageName = time() . '.' . $img->getClientOriginalExtension();
-            //     $img->move(public_path('images'), $imageName);
-
-            //     $imagePath = 'images/' . $imageName;
-
-                            
-            // }else{
-            //     $imagePath = null;
-            // }
-
             $customer = Customer::find($id);
 
             $customer->name=$request->name;
             $customer->contact=$request->contact;
             $customer->salary=$request->salary;
-            //$customer->image=$imagePath;
-
+            
             $customer->save();
-
-            // $address = $request->addresses;
-            // $customer->addresses()->createMany($address);
 
             $data = [
                 "status"=>200,
                 "message"=>'data successufuly updated'
 
             ];
-            return response()->json($data,200);
-
+           
+            return $request->name;
             
         }
 
-       
+   
     }
 
     public function deleteCustomer($id){
@@ -178,6 +151,22 @@ class CustomerController extends Controller
         ];
         return response()->json($data,200);
     }
+ 
+    public function updateAddressById(Request $request, $id){
 
-  
+        $adrs = Address::find($id);
+       
+        $adrs->address=$request->address;
+
+        $adrs->save();
+
+        $data = [
+            'status' => 200,
+            'message' => 'Success'
+        ];
+        return response()->json($data,200);
+
+    }
+
+
 }
